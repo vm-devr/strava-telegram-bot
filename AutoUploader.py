@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import os
+from threading import Thread
 
 import telepot
-from telepot.loop import MessageLoop
 import Strava
 import Storage
 import StravaDb
@@ -11,6 +11,7 @@ import re
 from pprint import pprint
 import traceback
 import json
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 print('Initializing data')
 strava_users_config = os.environ["STRAVA_USERS_CONFIG"]
@@ -20,6 +21,7 @@ stravaDb = StravaDb.StravaDb(storage, strava)
 bot_api_key = os.environ["BOT_API_KEY"]
 bot = telepot.Bot(bot_api_key)
 last_rank_cmd = 0
+port = int(os.environ["PORT"])
 
 def findTag(reg, command_all):
     exists = False
@@ -101,6 +103,23 @@ def handle(msg):
     logFile.write("\n\n")
     logFile.close()
 
-bot.message_loop(handle)
-while 1:
-   time.sleep(5000)
+
+def run_bot():
+    bot.message_loop(handle)
+    while 1:
+        time.sleep(5000)
+
+
+def run_http_server():
+    server_address = ('', port)
+    httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
+    httpd.serve_forever()
+
+
+def main():
+    Thread(target=run_http_server).start()
+    Thread(target=run_bot).start()
+
+
+if __name__ == '__main__':
+    main()
