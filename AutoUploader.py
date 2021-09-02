@@ -112,6 +112,7 @@ def run_bot():
 
 def run_http_server():
     server_address = ('', port)
+    print("Running HTTP server on address: ", server_address)
     httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
     httpd.serve_forever()
 
