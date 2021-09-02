@@ -89,7 +89,6 @@ class StravaDb(LeaderBoard):
 			if is_all:
 				distance = int(value['distance_end'])
 			raw_board.append({'id': key, 'name': self.strava.getName(key), 'distance': distance})
-		self.storage.save()
 		def takeTotal(elem):
 			return elem['distance']
 		raw_board.sort(key=takeTotal, reverse=True)

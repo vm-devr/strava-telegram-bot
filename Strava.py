@@ -26,7 +26,6 @@ class Strava(LeaderBoard):
 		raw_board = self.__getLeaderboard(self.group, prevWeek)
 		filtered_board = list(filter(lambda ath: ath['id'] in members, raw_board))
 		board = list(map(provideName, filtered_board[:elements]))
-		self.storage.save()
 
 		return self.printable(board)
 

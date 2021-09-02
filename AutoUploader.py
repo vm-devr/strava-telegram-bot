@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 
 import telepot
 from telepot.loop import MessageLoop
@@ -12,11 +13,12 @@ import traceback
 import json
 
 print('Initializing data')
-storage = Storage.Storage()
+strava_users_config = os.environ["STRAVA_USERS_CONFIG"]
+storage = Storage.Storage(strava_users_config)
 strava = Strava.Strava(storage)
 stravaDb = StravaDb.StravaDb(storage, strava)
-secret = "<secret>"
-bot = telepot.Bot(secret)
+bot_api_key = os.environ["BOT_API_KEY"]
+bot = telepot.Bot(bot_api_key)
 last_rank_cmd = 0
 
 def findTag(reg, command_all):
