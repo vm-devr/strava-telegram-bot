@@ -27,3 +27,16 @@ pip install -r requirements.txt
 ```shell
 python AutoUploader.py
 ```
+
+## How to develop
+
+1. Create and activate virtual environment.
+2. Download dev packages:
+```shell
+pip install -r requirements-dev.txt
+```
+
+2. Install pre-commit hook:
+```shell
+pre-commit install
+```
