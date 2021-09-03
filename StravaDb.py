@@ -1,10 +1,9 @@
-import re
-import Storage
-import Strava
 import sqlite3
-from LeaderBoard import LeaderBoard
 from datetime import datetime
+
+from LeaderBoard import LeaderBoard
 from logger import log
+
 
 class StravaDb(LeaderBoard):
 	def __init__(self, storage, strava):

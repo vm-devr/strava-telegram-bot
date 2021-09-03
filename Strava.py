@@ -1,10 +1,11 @@
-import requests
 import json
-import urllib3
 import re
-import Storage
-from logger import log
+
+import requests
+
 from LeaderBoard import LeaderBoard
+from logger import log
+
 
 class Strava(LeaderBoard):
 	session = requests.Session()

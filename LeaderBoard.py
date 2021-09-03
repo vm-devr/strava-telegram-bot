@@ -1,5 +1,3 @@
-import re
-
 class LeaderBoard(object):
 	def printable(self, data, dist_num = 3):
 		rank = 1

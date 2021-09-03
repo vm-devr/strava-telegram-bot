@@ -1,7 +1,4 @@
-#!/usr/bin/env python3
-
 import Storage
-import traceback
 import os
 
 storage = Storage.Storage()

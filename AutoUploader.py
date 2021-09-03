@@ -1,17 +1,17 @@
-#!/usr/bin/env python3
+import json
 import os
+import re
+import time
+import traceback
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 from threading import Thread
 
 import telepot
-import Strava
+
 import Storage
+import Strava
 import StravaDb
-import time
-import re
-import traceback
-import json
 from logger import log
-from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 log.info('Initializing data')
 strava_users_config = os.environ["STRAVA_USERS_CONFIG"]
