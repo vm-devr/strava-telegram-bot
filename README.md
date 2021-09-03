@@ -8,6 +8,7 @@
 pip install -r requirements.txt
 ```
 3. Define environment variables:
+   - `PORT` - HTTP port;
    - `BOT_API_KEY` - Telegram bot API key;
    - `STRAVA_USERS_CONFIG` - Strava users info in JSON format:
 ```json
