@@ -10,10 +10,10 @@ import time
 import re
 import traceback
 import json
-import logging
+from logger import log
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
-logging.info('Initializing data')
+log.info('Initializing data')
 strava_users_config = os.environ["STRAVA_USERS_CONFIG"]
 storage = Storage.Storage(strava_users_config)
 strava = Strava.Strava(storage)
@@ -36,7 +36,7 @@ def findTag(reg, command_all):
 
 def handle(msg):
     try:
-        logging.info(json.dumps(msg, sort_keys=True, indent=4))
+        log.info(json.dumps(msg, sort_keys=True, indent=4))
 
         if (msg is None) or ('chat' not in msg.keys()) or ('id' not in msg['chat'].keys()) or ('text' not in msg.keys()):
             return
@@ -49,7 +49,7 @@ def handle(msg):
         command = command_line[0]
         chat_id = msg['chat']['id']
         ret = None
-        logging.info(f'Processing {command_all} for {chat_id}')
+        log.info(f'Processing {command_all} for {chat_id}')
 
         if command.startswith('/rank'):
             global last_rank_cmd
@@ -85,12 +85,12 @@ def handle(msg):
             ret = None# u'Не зовсім зрозумів запитання, я поки вчуся та знаю лише /rank команду'
 
         if ret is not None:
-            logging.info(f'Sending back {ret}')
+            log.info(f'Sending back {ret}')
             bot.sendMessage(chat_id, ret, parse_mode='HTML')
         else:
-            logging.info('Do not send anything back')
+            log.info('Do not send anything back')
     except Exception as e:
-        logging.warning(f'Error processing request {traceback.format_exc()}')
+        log.warning(f'Error processing request {traceback.format_exc()}')
 
 
 def run_bot():
@@ -101,7 +101,7 @@ def run_bot():
 
 def run_http_server():
     server_address = ('', port)
-    logging.info(f'Running HTTP server on address: {server_address}')
+    log.info(f'Running HTTP server on address: {server_address}')
     httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
     httpd.serve_forever()
 

@@ -1,10 +1,10 @@
-import logging
 import re
 import Storage
 import Strava
 import sqlite3
 from LeaderBoard import LeaderBoard
 from datetime import datetime
+from logger import log
 
 class StravaDb(LeaderBoard):
 	def __init__(self, storage, strava):
@@ -12,7 +12,7 @@ class StravaDb(LeaderBoard):
 		self.strava = strava
 
 	def getLeaderboard(self, prevYear, all, elements):
-		logging.info('Reading latest leaderboard')
+		log.info('Reading latest leaderboard')
 
 		if elements > 99:
 			elements = 99
@@ -43,7 +43,7 @@ class StravaDb(LeaderBoard):
 		return str(today.year)
 
 	def getBoard(self, is_all, is_year, is_month, is_previous, elements):
-		logging.info('Reading latest leaderboard from db')
+		log.info('Reading latest leaderboard from db')
 
 		if elements > 99:
 			elements = 99
@@ -73,7 +73,7 @@ class StravaDb(LeaderBoard):
 			month_next = month + 1
 			query_fmt = 'select * from athletes_stats where processed like "{year}-0{month}%" or processed like "{year}-0{month_next}-01%" order by processed desc;'
 			query = query_fmt.format(year = year, month = month, month_next = month_next)
-			logging.info(query)
+			log.info(query)
 			
 		board_dict = {}
 		for row in cursor.execute(query):

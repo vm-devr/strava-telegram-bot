@@ -1,9 +1,9 @@
 import requests
 import json
-import logging
 import urllib3
 import re
 import Storage
+from logger import log
 from LeaderBoard import LeaderBoard
 
 class Strava(LeaderBoard):
@@ -15,7 +15,7 @@ class Strava(LeaderBoard):
 		self.storage = storage
 
 	def getLeaderboard(self, prevWeek, elements):
-		logging.info('Reading latest leaderboard')
+		log.info('Reading latest leaderboard')
 		def provideName(ath):
 			ath['name'] = self.getName(ath['id'])
 			return ath
@@ -34,7 +34,7 @@ class Strava(LeaderBoard):
 		idstr = str(id)
 		name = self.storage.getName(idstr)
 		if name is None:
-			logging.info(f'Reading name for {idstr}')
+			log.info(f'Reading name for {idstr}')
 			name = self.__getName(idstr)
 			self.storage.setName(idstr, name)
 		return name
@@ -53,7 +53,7 @@ class Strava(LeaderBoard):
 
 		r = self.session.get(url, headers=headers)
 		if r.status_code != 200:
-			logging.warning(f'Error reading leaderboard for {group}')
+			log.warning(f'Error reading leaderboard for {group}')
 			return []
 
 		data = json.loads(r.text)
@@ -74,14 +74,14 @@ class Strava(LeaderBoard):
 
 		r = self.session.get(url, headers=headers)
 		if r.status_code != 200:
-			logging.warning(f'Error reading name for {id}')
+			log.warning(f'Error reading name for {id}')
 			return ''
 
 		match = re.search(r'<title>Strava [A-Za-z]* Profile \| (.*)</title>', r.text)
 		try:
 			return match.group(1)
 		except:
-			logging.warning(f'Error parsing name for {id}')
+			log.warning(f'Error parsing name for {id}')
 		return ""
 
 	def enableLogging(self):
@@ -92,10 +92,10 @@ class Strava(LeaderBoard):
 			import httplib as http_client
 		http_client.HTTPConnection.debuglevel = 1
 
-		# You must initialize logging, otherwise you'll not see debug output.
-		logging.basicConfig()
-		logging.getLogger().setLevel(logging.DEBUG)
-		requests_log = logging.getLogger("requests.packages.urllib3")
-		requests_log.setLevel(logging.DEBUG)
+		# You must initialize log, otherwise you'll not see debug output.
+		log.basicConfig()
+		log.getLogger().setLevel(log.DEBUG)
+		requests_log = log.getLogger("requests.packages.urllib3")
+		requests_log.setLevel(log.DEBUG)
 		requests_log.propagate = True
 
