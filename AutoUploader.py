@@ -8,12 +8,12 @@ import Storage
 import StravaDb
 import time
 import re
-from pprint import pprint
 import traceback
 import json
+import logging
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
-print('Initializing data')
+logging.info('Initializing data')
 strava_users_config = os.environ["STRAVA_USERS_CONFIG"]
 storage = Storage.Storage(strava_users_config)
 strava = Strava.Strava(storage)
@@ -35,10 +35,8 @@ def findTag(reg, command_all):
     return exists
 
 def handle(msg):
-    logFile = open("grc.txt", "a")
     try:
-        logFile.write(json.dumps(msg, sort_keys=True, indent=4))
-        pprint(msg)
+        logging.info(json.dumps(msg, sort_keys=True, indent=4))
 
         if (msg is None) or ('chat' not in msg.keys()) or ('id' not in msg['chat'].keys()) or ('text' not in msg.keys()):
             return
@@ -51,9 +49,7 @@ def handle(msg):
         command = command_line[0]
         chat_id = msg['chat']['id']
         ret = None
-        cmdMsg = 'Processing ' + command_all + ' for ' + str(chat_id)
-        print(cmdMsg)
-        logFile.write(cmdMsg + "\n")
+        logging.info(f'Processing {command_all} for {chat_id}')
 
         if command.startswith('/rank'):
             global last_rank_cmd
@@ -89,19 +85,12 @@ def handle(msg):
             ret = None# u'Не зовсім зрозумів запитання, я поки вчуся та знаю лише /rank команду'
 
         if ret is not None:
-            print('Sending back')
-            logFile.write(ret + "\n")
+            logging.info(f'Sending back {ret}')
             bot.sendMessage(chat_id, ret, parse_mode='HTML')
         else:
-            print('Do not send anything back')
-            logFile.write('Do not send anything back' + "\n")
+            logging.info('Do not send anything back')
     except Exception as e:
-        print('Error processing request')
-        print(e)
-        logFile.write('Error processing request' + "\n")
-        traceback.print_exc()
-    logFile.write("\n\n")
-    logFile.close()
+        logging.warning(f'Error processing request {traceback.format_exc()}')
 
 
 def run_bot():
@@ -112,7 +101,7 @@ def run_bot():
 
 def run_http_server():
     server_address = ('', port)
-    print("Running HTTP server on address: ", server_address)
+    logging.info(f'Running HTTP server on address: {server_address}')
     httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
     httpd.serve_forever()
 

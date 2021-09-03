@@ -15,7 +15,7 @@ class Strava(LeaderBoard):
 		self.storage = storage
 
 	def getLeaderboard(self, prevWeek, elements):
-		print('Reading latest leaderboard')
+		logging.info('Reading latest leaderboard')
 		def provideName(ath):
 			ath['name'] = self.getName(ath['id'])
 			return ath
@@ -34,7 +34,7 @@ class Strava(LeaderBoard):
 		idstr = str(id)
 		name = self.storage.getName(idstr)
 		if name is None:
-			print('Reading name for ' + idstr)
+			logging.info(f'Reading name for {idstr}')
 			name = self.__getName(idstr)
 			self.storage.setName(idstr, name)
 		return name
@@ -53,7 +53,7 @@ class Strava(LeaderBoard):
 
 		r = self.session.get(url, headers=headers)
 		if r.status_code != 200:
-			print('Error reading leaderboard for ' + group)
+			logging.warning(f'Error reading leaderboard for {group}')
 			return []
 
 		data = json.loads(r.text)
@@ -74,14 +74,14 @@ class Strava(LeaderBoard):
 
 		r = self.session.get(url, headers=headers)
 		if r.status_code != 200:
-			print('Error reading name for ' + id)
+			logging.warning(f'Error reading name for {id}')
 			return ''
 
 		match = re.search(r'<title>Strava [A-Za-z]* Profile \| (.*)</title>', r.text)
 		try:
 			return match.group(1)
 		except:
-			print('Error parsing name for ' + id)
+			logging.warning(f'Error parsing name for {id}')
 		return ""
 
 	def enableLogging(self):
