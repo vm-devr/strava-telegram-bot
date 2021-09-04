@@ -24,7 +24,7 @@ last_rank_cmd = 0
 port = int(os.environ["PORT"])
 
 
-def findTag(reg, command_all):
+def find_tag(reg, command_all):
     match = re.search(reg, command_all)
     try:
         return match.group(1) is not None
@@ -62,10 +62,10 @@ def handle(msg):
             else:
                 last_rank_cmd = time.time()
 
-                prev = findTag(r"\/rank.*(попередн|previous)", command_all)
-                year = findTag(r"\/rank.*(рік|year)", command_all)
+                prev = find_tag(r"\/rank.*(попередн|previous)", command_all)
+                year = find_tag(r"\/rank.*(рік|year)", command_all)
                 month = False  # findTag(r'\/rank.*(місяць|month)', command_all)
-                everything = findTag(r"\/rank.*(все|everything|all)", command_all)
+                everything = find_tag(r"\/rank.*(все|everything|all)", command_all)
 
                 count = 0
                 match = re.search(r"(\d+)", command_all)
@@ -78,9 +78,9 @@ def handle(msg):
 
                 board = ""
                 if year or everything or month:
-                    board = stravaDb.getBoard(everything, year, month, prev, count)
+                    board = stravaDb.get_board(everything, year, month, prev, count)
                 else:
-                    board = strava.getLeaderboard(prev, count)
+                    board = strava.get_leaderboard(prev, count)
                 if len(board) == 0:
                     board = ["тут поки ніхто не бігав"]
                 ret = "<pre>" + "\n".join(board) + "</pre>"

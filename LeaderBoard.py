@@ -4,13 +4,14 @@ class LeaderBoard(object):
         for ath in data:
             ath["rank"] = rank
             rank += 1
-        self.__stringifyField(data, "rank", 2, True)
-        self.__stringifyField(data, "name", 21 - dist_num, True)
-        self.__stringifyField(data, "distance", dist_num, False)
+        self._stringify_field(data, "rank", 2, True)
+        self._stringify_field(data, "name", 21 - dist_num, True)
+        self._stringify_field(data, "distance", dist_num, False)
 
         return list(map(lambda ath: ath["rank"] + " " + ath["name"] + " " + ath["distance"] + "km", data))
 
-    def __stringifyField(self, data, field, max_symb, left):
+    @staticmethod
+    def _stringify_field(data, field, max_symb, left):
         max_item = 0
         for el in data:
             el[field] = str(el[field])

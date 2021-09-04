@@ -10,20 +10,20 @@ class StravaDb(LeaderBoard):
         self.storage = storage
         self.strava = strava
 
-    def getLeaderboard(self, prevYear, all, elements):
+    def get_leaderboard(self, prev_year, all_, elements):
         log.info("Reading latest leaderboard")
 
         if elements > 99:
             elements = 99
 
-        members = self.storage.getMembers()
+        members = self.storage.get_members()
         conn = sqlite3.connect("../grc_perl/grc.db")
         raw_board = []
         cursor = conn.cursor()
         query_fmt = (
             'SELECT id, name, CAST(ROUND(dst_{year}) as INT) As "distance" FROM athletes ORDER BY dst_{year} DESC;'
         )
-        query = query_fmt.format(year=self.getYear(prevYear, all))
+        query = query_fmt.format(year=self.get_year(prev_year, all_))
         for row in cursor.execute(query):
             raw_board.append({"id": row[0], "name": row[1], "distance": row[2]})
 
@@ -32,23 +32,24 @@ class StravaDb(LeaderBoard):
 
         return self.printable(board, 5)
 
-    def getYear(self, prevYear, all):
-        if all:
+    @staticmethod
+    def get_year(prev_year, all_):
+        if all_:
             return "all"
 
         today = datetime.today()
-        if prevYear:
+        if prev_year:
             return str(today.year - 1)
 
         return str(today.year)
 
-    def getBoard(self, is_all, is_year, is_month, is_previous, elements):
+    def get_board(self, is_all, is_year, is_month, is_previous, elements):
         log.info("Reading latest leaderboard from db")
 
         if elements > 99:
             elements = 99
 
-        members = self.storage.getMembers()
+        members = self.storage.get_members()
         conn = sqlite3.connect("../grc_perl/grc.db")
         raw_board = []
         cursor = conn.cursor()
@@ -95,12 +96,12 @@ class StravaDb(LeaderBoard):
             distance = int(value["distance_total"])
             if is_all:
                 distance = int(value["distance_end"])
-            raw_board.append({"id": key, "name": self.strava.getName(key), "distance": distance})
+            raw_board.append({"id": key, "name": self.strava.get_name(key), "distance": distance})
 
-        def takeTotal(elem):
+        def take_total(elem):
             return elem["distance"]
 
-        raw_board.sort(key=takeTotal, reverse=True)
+        raw_board.sort(key=take_total, reverse=True)
 
         filtered_board = list(filter(lambda ath: ath["id"] in members, raw_board))
 

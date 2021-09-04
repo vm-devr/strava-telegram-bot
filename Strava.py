@@ -15,34 +15,34 @@ class Strava(LeaderBoard):
     def __init__(self, storage):
         self.storage = storage
 
-    def getLeaderboard(self, prevWeek, elements):
+    def get_leaderboard(self, prev_week, elements):
         log.info("Reading latest leaderboard")
 
-        def provideName(ath):
-            ath["name"] = self.getName(ath["id"])
+        def provide_name(ath):
+            ath["name"] = self.get_name(ath["id"])
             return ath
 
         if elements > 99:
             elements = 99
-        members = self.storage.getMembers()
-        raw_board = self.__getLeaderboard(self.group, prevWeek)
+        members = self.storage.get_members()
+        raw_board = self._get_leaderboard(self.group, prev_week)
         filtered_board = list(filter(lambda ath: ath["id"] in members, raw_board))
-        board = list(map(provideName, filtered_board[:elements]))
+        board = list(map(provide_name, filtered_board[:elements]))
 
         return self.printable(board)
 
-    def getName(self, id):
-        idstr = str(id)
-        name = self.storage.getName(idstr)
+    def get_name(self, id_):
+        idstr = str(id_)
+        name = self.storage.get_name(idstr)
         if name is None:
             log.info(f"Reading name for {idstr}")
-            name = self.__getName(idstr)
-            self.storage.setName(idstr, name)
+            name = self._get_name(idstr)
+            self.storage.set_name(idstr, name)
         return name
 
-    def __getLeaderboard(self, group, prevWeek):
+    def _get_leaderboard(self, group, prev_week):
         url_fmt = "https://www.strava.com/clubs/{}/leaderboard{}"
-        addition = "?week_offset=1" if prevWeek else ""
+        addition = "?week_offset=1" if prev_week else ""
         url = url_fmt.format(group, addition)
 
         headers = {
@@ -72,7 +72,7 @@ class Strava(LeaderBoard):
             )
         )
 
-    def __getName(self, id):
+    def _get_name(self, id):
         url_fmt = "https://www.strava.com/athletes/{}"
         url = url_fmt.format(id)
 
@@ -90,7 +90,8 @@ class Strava(LeaderBoard):
             log.warning(f"Error parsing name for {id}")
         return ""
 
-    def enableLogging(self):
+    @staticmethod
+    def enable_logging():
         try:
             import http.client as http_client
         except ImportError:

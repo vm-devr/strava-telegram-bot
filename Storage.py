@@ -7,7 +7,7 @@ class Storage(object):
     def __init__(self, users_config):
         self.storage = json.loads(users_config)
 
-    def getName(self, id):
+    def get_name(self, id):
         if (
             ("names" in self.storage.keys())
             and (id in self.storage["names"].keys())
@@ -15,14 +15,14 @@ class Storage(object):
         ):
             return self.storage["names"][id]["name"]
 
-    def setName(self, id, name):
+    def set_name(self, id_, name):
         if "names" not in self.storage.keys():
             self.storage["names"] = {}
-        if id not in self.storage["names"].keys():
-            self.storage["names"][id] = {}
-        self.storage["names"][id]["name"] = name
+        if id_ not in self.storage["names"].keys():
+            self.storage["names"][id_] = {}
+        self.storage["names"][id_]["name"] = name
 
-    def getMembers(self):
+    def get_members(self):
         if "members" in self.storage.keys():
             return self.storage["members"]
         return []
