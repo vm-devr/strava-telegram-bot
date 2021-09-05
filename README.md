@@ -3,7 +3,7 @@
 ## How to run
 
 1. Install Python [.python-version](.python-version).
-2. Download packages: 
+2. Download packages:
 ```shell
 pip install -r requirements.txt
 ```

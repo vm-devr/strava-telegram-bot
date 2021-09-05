@@ -25,7 +25,7 @@ if (StravaParser::login()) {
 			warn $@ if $@;
 			my $wait = int(rand(60));
 			print " waiting for $wait minutes\n";
-			
+
 			#sleep $wait * 60;
 		}
 		last;

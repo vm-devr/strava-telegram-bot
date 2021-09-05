@@ -109,7 +109,7 @@ sub insertAthleteStats {
 	my $sql = "INSERT INTO athletes_stats (processed, athlete_id, distance) VALUES ('$dttm', $id, $dst_all)";
 	$dbh->do($sql);
 	print "$dttm $id $dst_all";
-	
+
 	# update start year data
 	if (!checkAthleteStatsStart($id)) {
 		my $dt2020start = "2021-01-01 00:00:00";
