@@ -1,11 +1,11 @@
-#!/usr/bin/perl -wIlib
+#!/usr/bin/perl -wImodules
 use warnings;
 use strict;
 use DBI;
 use List::Util();
 use Data::Dumper qw(Dumper);
 
-#use lib 'modules';
+#use modules 'modules';
 use parser;
 
 if (!@ARGV) {
