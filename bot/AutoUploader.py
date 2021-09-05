@@ -6,11 +6,10 @@ import traceback
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from threading import Thread
 
-import telepot
-
 import Storage
 import Strava
 import StravaDb
+import telepot
 from logger import log
 
 log.info("Initializing data")

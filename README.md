@@ -1,13 +1,13 @@
-# strava-telegram-bot
+# Strava Telegram Bot
 
-## How to run
+## How to run Telegram bot
 
-1. Install Python [.python-version](.python-version).
-2. Download packages:
+1. Install Python [.python-version](bot/.python-version).
+3. Download packages:
 ```shell
 pip install -r requirements.txt
 ```
-3. Define environment variables:
+4. Define environment variables:
    - `PORT` - HTTP port;
    - `BOT_API_KEY` - Telegram bot API key;
    - `STRAVA_USERS_CONFIG` - Strava users info in JSON format:
@@ -23,9 +23,9 @@ pip install -r requirements.txt
     ]
 }
 ```
-4. Run:
+5. Run:
 ```shell
-python AutoUploader.py
+python bot/AutoUploader.py
 ```
 
 ## How to develop

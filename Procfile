@@ -1,1 +1,1 @@
-web: python AutoUploader.py
+web: python bot/AutoUploader.py
