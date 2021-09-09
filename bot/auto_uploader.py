@@ -6,19 +6,19 @@ import traceback
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from threading import Thread
 
-import Storage
-import Strava
-import StravaDb
-import telepot
 from logger import log
+from storage import Storage
+from strava import Strava
+from strava_db import StravaDb
+from telepot import Bot
 
 log.info("Initializing data")
 strava_users_config = os.environ["STRAVA_USERS_CONFIG"]
-storage = Storage.Storage(strava_users_config)
-strava = Strava.Strava(storage)
-stravaDb = StravaDb.StravaDb(storage, strava)
+storage = Storage(strava_users_config)
+strava = Strava(storage)
+strava_db = StravaDb(storage, strava)
 bot_api_key = os.environ["BOT_API_KEY"]
-bot = telepot.Bot(bot_api_key)
+bot = Bot(bot_api_key)
 last_rank_cmd = 0
 port = int(os.environ["PORT"])
 
@@ -77,7 +77,7 @@ def handle(msg):
 
                 board = ""
                 if year or everything or month:
-                    board = stravaDb.get_board(everything, year, month, prev, count)
+                    board = strava_db.get_board(everything, year, month, prev, count)
                 else:
                     board = strava.get_leaderboard(prev, count)
                 if len(board) == 0:

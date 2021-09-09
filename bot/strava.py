@@ -2,7 +2,7 @@ import json
 import re
 
 import requests
-from LeaderBoard import LeaderBoard
+from leaderboard import LeaderBoard
 from logger import log
 
 

@@ -25,7 +25,7 @@ pip install -r requirements.txt
 ```
 5. Run:
 ```shell
-python bot/AutoUploader.py
+python bot/auto_uploader.py
 ```
 
 ## How to develop
