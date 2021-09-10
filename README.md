@@ -40,3 +40,8 @@ pip install -r requirements-dev.txt
 ```shell
 pre-commit install
 ```
+
+3. Run python unit tests:
+```shell
+python -m pytest bot/test/unit
+```
