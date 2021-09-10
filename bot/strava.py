@@ -36,7 +36,6 @@ class Strava(LeaderBoard):
         if name is None:
             log.info(f"Reading name for {idstr}")
             name = self._get_name(idstr)
-            self.storage.set_name(idstr, name)
         return name
 
     def _get_leaderboard(self, group, prev_week):

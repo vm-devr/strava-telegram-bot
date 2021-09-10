@@ -9,20 +9,13 @@ class Storage(object):
 
     def get_name(self, id_):
         if (
-            ("names" in self.storage.keys())
-            and (id_ in self.storage["names"].keys())
-            and ("name" in self.storage["names"][id_].keys())
+            ("members" in self.storage.keys())
+            and (id_ in self.storage["members"].keys())
+            and ("name" in self.storage["members"][id_].keys())
         ):
-            return self.storage["names"][id_]["name"]
+            return self.storage["members"][id_]["name"]
 
-    def set_name(self, id_, name):
-        if "names" not in self.storage.keys():
-            self.storage["names"] = {}
-        if id_ not in self.storage["names"].keys():
-            self.storage["names"][id_] = {}
-        self.storage["names"][id_]["name"] = name
+        return ""
 
     def get_members(self):
-        if "members" in self.storage.keys():
-            return self.storage["members"]
-        return []
+        return [int(x) for x in self.storage["members"].keys()]
