@@ -28,6 +28,19 @@ pip install -r requirements.txt
 python bot/auto_uploader.py
 ```
 
+## How to run athletes stats updater
+
+1. Install Perl.
+2. Download perl modules via cpan.
+3. Define environment variables:
+   - `STRAVA_EMAIL` - Strava user email;
+   - `STRAVA_PASSWORD` - Strava user password.
+4. Run:
+```shell
+cd perl
+perl readathletestats.pl <list of Strava ids separated by whitespace>
+```
+
 ## How to develop
 
 1. Create and activate virtual environment.

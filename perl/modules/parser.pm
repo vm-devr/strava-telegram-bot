@@ -305,8 +305,8 @@ sub login {
 	my $response = $mech->submit_form(
 		form_id => 'login_form',
 		fields    => {
-			email  => '<account email>',
-			password  => '<account pass>'
+			email  => $ENV{'STRAVA_EMAIL'},
+			password  => $ENV{'STRAVA_PASSWORD'}
 		}
 	);
 	print "Login error: $response->status_line\n" unless $response->is_success;
