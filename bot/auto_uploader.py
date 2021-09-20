@@ -15,7 +15,8 @@ from telepot import Bot
 log.info("Initializing data")
 strava_users_config = os.environ["STRAVA_USERS_CONFIG"]
 storage = Storage(strava_users_config)
-strava = Strava(storage)
+strava_group = int(os.environ["STRAVA_GROUP"])
+strava = Strava(storage, strava_group)
 strava_db = StravaDb(storage, strava)
 bot_api_key = os.environ["BOT_API_KEY"]
 bot = Bot(bot_api_key)

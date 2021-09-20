@@ -11,11 +11,11 @@ from storage import Storage
 
 class Strava(LeaderBoard):
     session = requests.Session()
-    group = "252700"
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0"
 
-    def __init__(self, storage: Storage):
+    def __init__(self, storage: Storage, group: int):
         self.storage = storage
+        self.group = group
 
     def get_leaderboard(self, prev_week, elements):
         log.info("Reading latest leaderboard")
