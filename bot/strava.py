@@ -1,9 +1,12 @@
 import json
 import re
+from typing import List
 
 import requests
 from leaderboard import LeaderBoard
 from logger import log
+from member_list import Member, MemberList
+from storage import Storage
 
 
 class Strava(LeaderBoard):
@@ -11,7 +14,7 @@ class Strava(LeaderBoard):
     group = "252700"
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0"
 
-    def __init__(self, storage):
+    def __init__(self, storage: Storage):
         self.storage = storage
 
     def get_leaderboard(self, prev_week, elements):
@@ -103,3 +106,7 @@ class Strava(LeaderBoard):
         requests_log = log.getLogger("requests.packages.urllib3")
         requests_log.setLevel(log.DEBUG)
         requests_log.propagate = True
+
+    def get_strava_members(self) -> List[str]:
+        members = [Member(m, self.get_name(m)) for m in self.storage.get_members()]
+        return MemberList.printable(members)

@@ -83,6 +83,9 @@ def handle(msg):
                 if len(board) == 0:
                     board = ["тут поки ніхто не бігав"]
                 ret = "<pre>" + "\n".join(board) + "</pre>"
+        elif command.startswith("/members"):
+            members = strava.get_strava_members()
+            ret = "\n".join(members)
         else:
             ret = None  # u'Не зовсім зрозумів запитання, я поки вчуся та знаю лише /rank команду'
 

@@ -1,4 +1,5 @@
 import json
+from typing import List
 
 
 class Storage(object):
@@ -17,5 +18,5 @@ class Storage(object):
 
         return ""
 
-    def get_members(self):
+    def get_members(self) -> List[int]:
         return [int(x) for x in self.storage["members"].keys()]
