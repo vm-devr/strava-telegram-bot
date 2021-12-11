@@ -11,19 +11,13 @@ pip install -r requirements.txt
    - `PORT` - HTTP port;
    - `BOT_API_KEY` - Telegram bot API key;
    - `STRAVA_GROUP` - Strava club id;
-   - `STRAVA_USERS_CONFIG` - Strava club members in JSON format:
-```json
-{
-   "members": {
-      "11111222": {
-         "name": "John Doe"
-      },
-      "11111333": {
-         "name": "Jane Doe"
-      }
-    }
-}
+   - `STRAVA_USERS_CONFIG` - Strava club members in the format `StravaId: Name Surname`:
 ```
+111222: John Doe
+1111333: Jane Doe
+11111444: Вася Пупкін
+```
+
 5. Run:
 ```shell
 python bot/auto_uploader.py

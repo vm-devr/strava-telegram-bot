@@ -33,13 +33,8 @@ class Strava(LeaderBoard):
 
         return self.printable(board)
 
-    def get_name(self, id_):
-        idstr = str(id_)
-        name = self.storage.get_name(idstr)
-        if name is None:
-            log.info(f"Reading name for {idstr}")
-            name = self._get_name(idstr)
-        return name
+    def get_name(self, id_: int) -> str:
+        return self.storage.get_name(id_)
 
     def _get_leaderboard(self, group, prev_week):
         url_fmt = "https://www.strava.com/clubs/{}/leaderboard{}"
