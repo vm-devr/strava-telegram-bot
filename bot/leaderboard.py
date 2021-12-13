@@ -1,5 +1,5 @@
 class LeaderBoard(object):
-    def printable(self, data, dist_num=3):
+    def get_table(self, data, dist_num=3):
         rank = 1
         for ath in data:
             ath["rank"] = rank

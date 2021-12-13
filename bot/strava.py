@@ -30,7 +30,7 @@ class Strava(LeaderBoard):
         filtered_board = list(filter(lambda ath: ath["id"] in members, raw_board))
         board = list(map(provide_name, filtered_board[:elements]))
 
-        return self.printable(board)
+        return self.get_table(board)
 
     def get_name(self, id_: int) -> str:
         return self.storage.get_name(id_)
@@ -85,4 +85,4 @@ class Strava(LeaderBoard):
 
     def get_strava_members(self) -> List[str]:
         members = [Member(m, self.get_name(m)) for m in self.storage.get_members()]
-        return MemberList.printable(members)
+        return MemberList.get_table(members)

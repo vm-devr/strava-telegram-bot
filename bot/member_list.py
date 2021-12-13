@@ -16,7 +16,7 @@ class Member:
 
 class MemberList:
     @staticmethod
-    def printable(member_ids: List[Member]) -> List[str]:
+    def get_table(member_ids: List[Member]) -> List[str]:
         # The logo is needed for Telegram's preview. Because if it's not provided Telegram generates preview from
         # the picture of the first member.
         title = ['Бігуни <a href="https://gutsulrunning.club/images/2021/08/05/header_large.jpeg">GRC:</a>']

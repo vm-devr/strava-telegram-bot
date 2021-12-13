@@ -30,7 +30,7 @@ class StravaDb(LeaderBoard):
         filtered_board = list(filter(lambda ath: ath["id"] in members, raw_board))
         board = filtered_board[:elements]
 
-        return self.printable(board, 5)
+        return self.get_table(board, 5)
 
     @staticmethod
     def get_year(prev_year, all_):
@@ -106,4 +106,4 @@ class StravaDb(LeaderBoard):
         filtered_board = list(filter(lambda ath: ath["id"] in members, raw_board))
 
         board = filtered_board[:elements]
-        return self.printable(board, dist_num)
+        return self.get_table(board, dist_num)
