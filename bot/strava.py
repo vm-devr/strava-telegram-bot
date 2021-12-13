@@ -1,5 +1,4 @@
 import json
-import re
 from typing import List
 
 import requests
@@ -67,24 +66,6 @@ class Strava(LeaderBoard):
                 key=lambda ath: ath["rank"],
             )
         )
-
-    def _get_name(self, id):
-        url_fmt = "https://www.strava.com/athletes/{}"
-        url = url_fmt.format(id)
-
-        headers = {"User-Agent": self.user_agent, "Referer": url}
-
-        r = self.session.get(url, headers=headers)
-        if r.status_code != 200:
-            log.warning(f"Error reading name for {id}")
-            return ""
-
-        match = re.search(r"<title>Strava [A-Za-z]* Profile \| (.*)</title>", r.text)
-        try:
-            return match.group(1)
-        except IndexError:
-            log.warning(f"Error parsing name for {id}")
-        return ""
 
     @staticmethod
     def enable_logging():
