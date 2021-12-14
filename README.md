@@ -20,7 +20,7 @@ pip install -r requirements.txt
 
 5. Run:
 ```shell
-python bot/auto_uploader.py
+python bot/bot.py
 ```
 
 ## How to run athletes stats updater
