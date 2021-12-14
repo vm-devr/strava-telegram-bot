@@ -69,14 +69,10 @@ class Strava(LeaderBoard):
 
     @staticmethod
     def enable_logging():
-        try:
-            import http.client as http_client
-        except ImportError:
-            # Python 2
-            import httplib as http_client
+        import http.client as http_client
+
         http_client.HTTPConnection.debuglevel = 1
 
-        # You must initialize log, otherwise you'll not see debug output.
         log.basicConfig()
         log.getLogger().setLevel(log.DEBUG)
         requests_log = log.getLogger("requests.packages.urllib3")
