@@ -7,7 +7,7 @@ charset-normalizer==2.0.4
 idna==3.2
 multidict==5.1.0
 requests==2.26.0
-telepot==12.7
+telepot-x==12.8
 typing-extensions==3.10.0.2
 urllib3==1.26.6
 yarl==1.6.3
