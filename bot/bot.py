@@ -10,6 +10,7 @@ from storage import Storage
 from strava import Strava
 from strava_db import StravaDb
 from telepot import Bot
+from telepot.loop import GetUpdatesLoop
 
 log.info("Initializing data")
 strava_users_config = os.environ["STRAVA_USERS_CONFIG"]
@@ -34,16 +35,21 @@ def find_tag(reg, command_all):
 def handle(msg):
     log.info(json.dumps(msg, sort_keys=True, indent=4))
 
-    if (msg is None) or ("chat" not in msg.keys()) or ("id" not in msg["chat"].keys()) or ("text" not in msg.keys()):
+    if (msg is None) or ("message" not in msg.keys()):
         return
 
-    command_all = msg["text"]
+    message = msg['message']
+    if ("message_id" not in message.keys()) or ("text" not in message.keys()):
+        return
+
+    command_all = message["text"]
     command_line = list(filter(lambda x: len(x) > 0, command_all.split(" ")))
     if len(command_line) < 1:
         return
 
+    chat = message['chat']
     command = command_line[0]
-    chat_id = msg["chat"]["id"]
+    chat_id = chat["id"]
     ret = None
     log.info(f"Processing {command_all} for {chat_id}")
 
@@ -91,9 +97,7 @@ def handle(msg):
 
 
 def run_bot():
-    bot.message_loop(handle)
-    while 1:
-        time.sleep(5000)
+    GetUpdatesLoop(bot, handle).run_forever()
 
 
 def run_http_server():
