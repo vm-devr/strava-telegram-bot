@@ -11,3 +11,4 @@ telepot-x==12.8
 typing-extensions==3.10.0.2
 urllib3==1.26.6
 yarl==1.6.3
+envclasses==0.2.7
