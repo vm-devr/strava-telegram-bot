@@ -15,4 +15,4 @@ class Storage(object):
         return self.storage.get(id_, "")
 
     def get_members(self) -> List[int]:
-        return [x for x in self.storage.keys()]
+        return list(self.storage.keys())

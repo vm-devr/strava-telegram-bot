@@ -40,7 +40,7 @@ class Bot:
 
         command_all = message["text"]
         command_line = list(filter(lambda x: len(x) > 0, command_all.split(" ")))
-        if len(command_line) < 1:
+        if not command_line:
             return
 
         chat = message["chat"]
