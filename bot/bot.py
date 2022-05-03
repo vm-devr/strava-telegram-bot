@@ -64,14 +64,14 @@ class Bot:
     @RateLimiter(max_calls=1, period=10)  # one command per 10 seconds
     def handle_rank(self, command: str) -> str:
         count = 50
-        if command == "/rank":
-            board = self.strava.get_leaderboard(prev_week=False, elements=count)
-        elif command == "/rank_10":
-            board = self.strava.get_leaderboard(prev_week=False, elements=10)
-        elif command == "/rank_previous":
-            board = self.strava.get_leaderboard(prev_week=True, elements=count)
-        else:
-            board = []
+        board = []
+        match command:
+            case "/rank":
+                board = self.strava.get_leaderboard(prev_week=False, elements=count)
+            case "/rank_10":
+                board = self.strava.get_leaderboard(prev_week=False, elements=10)
+            case "/rank_previous":
+                board = self.strava.get_leaderboard(prev_week=True, elements=count)
 
         if not board:
             board = ["тут поки ніхто не бігав"]
