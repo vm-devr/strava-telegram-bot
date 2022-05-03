@@ -1,11 +1,11 @@
 import json
-import time
 from dataclasses import dataclass
 
 import telepot
 import telepot.loop
 from envclasses import envclass
 from logger import log
+from ratelimiter import RateLimiter
 from storage import Storage
 from strava import Strava
 
@@ -24,7 +24,6 @@ class Bot:
         storage = Storage(config.strava_users_config)
         self.strava = Strava(storage, config.strava_group)
         self.bot = telepot.Bot(config.bot_api_key)
-        self.last_rank_cmd = 0
 
     def run(self) -> None:
         telepot.loop.GetUpdatesLoop(self.bot, self.handle).run_forever()
@@ -47,37 +46,37 @@ class Bot:
         chat = message["chat"]
         command = command_line[0]
         chat_id = chat["id"]
-        ret = None
         log.info(f"Processing {command_all} for {chat_id}")
 
+        ret = None
         if command.startswith("/rank"):
-            one_per = 10
-            if time.time() - self.last_rank_cmd < one_per:
-                ret = "Вас багато, а я один! Не більше однієї команди на {} секунд".format(one_per)
-            else:
-                self.last_rank_cmd = time.time()
-
-                count = 50
-                if command == "/rank":
-                    board = self.strava.get_leaderboard(prev_week=False, elements=count)
-                elif command == "/rank_previous":
-                    board = self.strava.get_leaderboard(prev_week=True, elements=count)
-                elif command == "/rank_10":
-                    board = self.strava.get_leaderboard(prev_week=False, elements=10)
-                else:
-                    board = []
-
-                if not board:
-                    board = ["тут поки ніхто не бігав"]
-                ret = "<pre>" + "\n".join(board) + "</pre>"
+            ret = self.handle_rank(command)
         elif command == "/members":
-            members = self.strava.get_strava_members()
-            ret = "\n".join(members)
-        else:
-            ret = None  # u'Не зовсім зрозумів запитання, я поки вчуся та знаю лише /rank команду'
+            ret = self.handle_members()
 
-        if ret is not None:
-            log.info(f"Sending back {ret}")
-            self.bot.sendMessage(chat_id, ret, parse_mode="HTML")
-        else:
+        if not ret:
             log.info("Do not send anything back")
+            return
+
+        log.info(f"Sending back {ret}")
+        self.bot.sendMessage(chat_id, ret, parse_mode="HTML")
+
+    @RateLimiter(max_calls=1, period=10)  # one command per 10 seconds
+    def handle_rank(self, command: str) -> str:
+        count = 50
+        if command == "/rank":
+            board = self.strava.get_leaderboard(prev_week=False, elements=count)
+        elif command == "/rank_10":
+            board = self.strava.get_leaderboard(prev_week=False, elements=10)
+        elif command == "/rank_previous":
+            board = self.strava.get_leaderboard(prev_week=True, elements=count)
+        else:
+            board = []
+
+        if not board:
+            board = ["тут поки ніхто не бігав"]
+
+        return "<pre>" + "\n".join(board) + "</pre>"
+
+    def handle_members(self):
+        return "\n".join(self.strava.get_strava_members())
