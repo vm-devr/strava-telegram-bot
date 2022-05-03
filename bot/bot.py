@@ -1,5 +1,4 @@
 import json
-import re
 import time
 from dataclasses import dataclass
 
@@ -9,7 +8,6 @@ from envclasses import envclass
 from logger import log
 from storage import Storage
 from strava import Strava
-from strava_db import StravaDb
 
 
 @envclass
@@ -25,7 +23,6 @@ class Bot:
         log.info("Initializing data")
         storage = Storage(config.strava_users_config)
         self.strava = Strava(storage, config.strava_group)
-        self.strava_db = StravaDb(storage, self.strava)
         self.bot = telepot.Bot(config.bot_api_key)
         self.last_rank_cmd = 0
 
@@ -60,29 +57,20 @@ class Bot:
             else:
                 self.last_rank_cmd = time.time()
 
-                prev = find_tag(r"\/rank.*(попередн|previous)", command_all)
-                year = find_tag(r"\/rank.*(рік|year)", command_all)
-                month = False  # findTag(r'\/rank.*(місяць|month)', command_all)
-                everything = find_tag(r"\/rank.*(все|everything|all)", command_all)
-
-                count = 0
-                match = re.search(r"(\d+)", command_all)
-                try:
-                    count = int(match.group(1))
-                except (IndexError, AttributeError):
-                    count = 0
-                if count < 1 or count > 50:
-                    count = 50
-
-                board = ""
-                if year or everything or month:
-                    board = self.strava_db.get_board(everything, year, month, prev, count)
+                count = 50
+                if command == "/rank":
+                    board = self.strava.get_leaderboard(prev_week=False, elements=count)
+                elif command == "/rank_previous":
+                    board = self.strava.get_leaderboard(prev_week=True, elements=count)
+                elif command == "/rank_10":
+                    board = self.strava.get_leaderboard(prev_week=False, elements=10)
                 else:
-                    board = self.strava.get_leaderboard(prev, count)
-                if len(board) == 0:
+                    board = []
+
+                if not board:
                     board = ["тут поки ніхто не бігав"]
                 ret = "<pre>" + "\n".join(board) + "</pre>"
-        elif command.startswith("/members"):
+        elif command == "/members":
             members = self.strava.get_strava_members()
             ret = "\n".join(members)
         else:
@@ -93,11 +81,3 @@ class Bot:
             self.bot.sendMessage(chat_id, ret, parse_mode="HTML")
         else:
             log.info("Do not send anything back")
-
-
-def find_tag(reg, command_all):
-    match = re.search(reg, command_all)
-    try:
-        return match.group(1) is not None
-    except (IndexError, AttributeError):
-        return False
