@@ -1,7 +1,9 @@
+import unittest
+
 from bot.member_list import Member, MemberList
 
 
-class TestMemberList:
+class TestMemberList(unittest.TestCase):
     def test_get_table(self):
         members = [Member(1, "Вася Пупкін"), Member(2, "John Doe")]
 
