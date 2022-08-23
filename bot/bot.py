@@ -65,7 +65,7 @@ class Bot:
     def handle_rank(self, command: str) -> str:
         count = 50
         board = []
-        match command:
+        match command.split("@")[0]:  # in Telegram groups commands look like /rank_10@gutsul2014_bot
             case "/rank":
                 board = self.strava.get_leaderboard(prev_week=False, elements=count)
             case "/rank_10":
