@@ -1,5 +1,11 @@
 # Strava Telegram Bot
 
+## Live
+
+[Render](https://gutsul-bot.onrender.com)
+
+[Cronhub](https://cronhub.io/schedulers/619/overview)
+
 ## How to run Telegram bot
 
 1. Install Python [.python-version](bot/.python-version).
