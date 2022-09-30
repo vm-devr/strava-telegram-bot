@@ -24,7 +24,7 @@ pip install -r requirements.txt
 
 5. Run:
 ```shell
-python bot/bot.py
+python bot/main.py
 ```
 
 ## How to develop
