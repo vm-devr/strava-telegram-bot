@@ -8,7 +8,7 @@
 
 ## How to run Telegram bot
 
-1. Install Python [.python-version](bot/.python-version).
+1. Install Python [.python-version](.python-version).
 3. Download packages:
 ```shell
 pip install -r requirements.txt
