@@ -31,7 +31,7 @@ def main():
     Thread(target=run_http_server, args=(port,)).start()
 
     # This is needed to temporarily disable the Telegram bot on a Cloud to run on a local machine.
-    if not str2bool(os.getenv("BOT_IS_DISABLED")):
+    if not str2bool(str(os.getenv("BOT_IS_DISABLED"))):
         bot = Bot(config)
         Thread(target=bot.run).start()
 
