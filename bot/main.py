@@ -15,15 +15,25 @@ def run_http_server(port: int) -> None:
     httpd.serve_forever()
 
 
+def str2bool(v: str) -> bool:
+    return v.lower() in ("true", "1")
+
+
+def str2int(v: str, default: int) -> int:
+    return int(v) if v else default
+
+
 def main():
     config = Config()
     load_env(config, prefix="")
-    bot = Bot(config)
-    Thread(target=bot.run).start()
 
-    port_s = os.getenv("PORT")
-    port = int(port_s) if port_s else 8080
+    port = str2int(os.getenv("PORT"), 8080)
     Thread(target=run_http_server, args=(port,)).start()
+
+    # This is needed to temporarily disable the Telegram bot on a Cloud to run on a local machine.
+    if not str2bool(os.getenv("BOT_IS_DISABLED")):
+        bot = Bot(config)
+        Thread(target=bot.run).start()
 
 
 if __name__ == "__main__":
