@@ -22,8 +22,9 @@ class Bot:
     def __init__(self, config: Config) -> None:
         log.info("Initializing data")
         storage = Storage(config.strava_users_config)
-        self.strava = Strava(storage, config.strava_group)
-        self.bot = telepot.Bot(config.bot_api_key)
+        self.config = config
+        self.strava = Strava(storage, self.config.strava_group)
+        self.bot = telepot.Bot(self.config.bot_api_key)
 
     def run(self) -> None:
         telepot.loop.GetUpdatesLoop(self.bot, self.handle).run_forever()
@@ -53,6 +54,8 @@ class Bot:
             ret = self.handle_rank(command)
         elif command == "/members":
             ret = self.handle_members()
+        elif command == "/info":
+            ret = self.handle_info()
 
         if not ret:
             log.info("Do not send anything back")
@@ -80,3 +83,10 @@ class Bot:
 
     def handle_members(self):
         return "\n".join(self.strava.get_strava_members())
+
+    def handle_info(self):
+        return (
+            "Для появи вас в рейтингу, необхідно виконати дії:\n1. Подати заявку на вступ в "
+            f'<a href="https://www.strava.com/clubs/{self.config.strava_group}">Strava клуб</a>.\n'
+            f"2. Написати в Telegram @{self.config.bot_admin}. Адмін заапрувить заявку та налаштує бота."
+        )
