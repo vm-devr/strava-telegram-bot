@@ -13,9 +13,17 @@ from strava import Strava
 @envclass
 @dataclass
 class Config:
+    # Strava users config in format "StravaId: Name Surname` separated by `;`
     strava_users_config: str = ""
-    strava_group: int = 8080
+    # Strava club ID
+    strava_group: int = 1
+
+    # The Telegram bot API key https://core.telegram.org/api/obtaining_api_id
     bot_api_key: str = ""
+    # If True telepot bot loop doesn't run. It is needed to temporarily disable the bot on a Cloud to run locally
+    bot_is_disabled: bool = False
+    # The Telegram user manages the bot
+    bot_admin: str = ""
 
 
 class Bot:
@@ -27,6 +35,9 @@ class Bot:
         self.bot = telepot.Bot(self.config.bot_api_key)
 
     def run(self) -> None:
+        if self.config.bot_is_disabled:
+            return
+
         telepot.loop.GetUpdatesLoop(self.bot, self.handle).run_forever()
 
     def handle(self, msg) -> None:
