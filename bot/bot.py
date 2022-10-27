@@ -30,7 +30,7 @@ class Bot:
         telepot.loop.GetUpdatesLoop(self.bot, self.handle).run_forever()
 
     def handle(self, msg) -> None:
-        log.info(json.dumps(msg, sort_keys=True, indent=4))
+        log.debug("handle " + json.dumps(msg, sort_keys=True, indent=4))
 
         if (msg is None) or ("message" not in msg.keys()):
             return
@@ -61,7 +61,7 @@ class Bot:
             log.info("Do not send anything back")
             return
 
-        log.info(f"Sending back {ret}")
+        log.debug(f"Sending back {ret}")
         self.bot.sendMessage(chat_id, ret, parse_mode="HTML")
 
     @RateLimiter(max_calls=1, period=10)  # one command per 10 seconds

@@ -17,7 +17,7 @@ class Strava(LeaderBoard):
         self.group = group
 
     def get_leaderboard(self, prev_week, elements):
-        log.info("Reading latest leaderboard")
+        log.debug("Reading latest leaderboard")
 
         def provide_name(ath):
             ath["name"] = self.get_name(ath["id"])
