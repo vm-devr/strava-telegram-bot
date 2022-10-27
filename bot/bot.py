@@ -34,11 +34,11 @@ class Bot:
         self.strava = Strava(storage, self.config.strava_group)
         self.bot = telepot.Bot(self.config.bot_api_key)
 
-    def run(self) -> None:
+    def run_as_thread(self) -> None:
         if self.config.bot_is_disabled:
             return
 
-        telepot.loop.GetUpdatesLoop(self.bot, self.handle).run_forever()
+        telepot.loop.GetUpdatesLoop(self.bot, self.handle).run_as_thread()
 
     def handle(self, msg) -> None:
         log.debug("handle " + json.dumps(msg, sort_keys=True, indent=4))

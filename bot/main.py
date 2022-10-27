@@ -1,7 +1,6 @@
 import os
 import sys
 from http.server import HTTPServer, SimpleHTTPRequestHandler
-from threading import Thread
 
 from envclasses import load_env
 from logger import log
@@ -30,11 +29,11 @@ def main():
     config = Config()
     load_env(config, prefix="")
 
-    port = str2int(os.getenv("PORT"), 8080)
-    Thread(target=run_http_server, args=(port,)).start()
-
     bot = Bot(config)
-    Thread(target=bot.run).start()
+    bot.run_as_thread()
+
+    port = str2int(os.getenv("PORT"), 8080)
+    run_http_server(port)
 
 
 if __name__ == "__main__":
