@@ -1,5 +1,4 @@
 import json
-import time
 from dataclasses import dataclass
 
 import telepot
@@ -39,7 +38,6 @@ class Bot:
         if self.config.bot_is_disabled:
             return
 
-        time.sleep(10)  # workaround for deploy on render.com
         telepot.loop.GetUpdatesLoop(self.bot, self.handle).run_forever()
 
     def handle(self, msg) -> None:
