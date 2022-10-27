@@ -1,4 +1,5 @@
 import os
+import sys
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from threading import Thread
 
@@ -9,10 +10,16 @@ from bot import Bot, Config
 
 
 def run_http_server(port: int) -> None:
-    server_address = ("", port)
-    log.info(f"Running HTTP server on address: {server_address}")
-    httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
-    httpd.serve_forever()
+    try:
+        server_address = ("", port)
+        log.info(f"Running HTTP server on address: {server_address}")
+        httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
+        httpd.serve_forever()
+    except BrokenPipeError:
+        # See https://docs.python.org/3/library/signal.html#note-on-sigpipe
+        devnull = os.open(os.devnull, os.O_WRONLY)
+        os.dup2(devnull, sys.stdout.fileno())
+        sys.exit(1)
 
 
 def str2bool(v: str) -> bool:
