@@ -1,9 +1,11 @@
 import json
 from dataclasses import dataclass
+from datetime import datetime
 
 import telepot
 import telepot.loop
 from envclasses import envclass
+from leaderboard import LeaderBoard
 from logger import log
 from ratelimiter import RateLimiter
 from storage import Storage
@@ -33,6 +35,7 @@ class Bot:
         self.config = config
         self.strava = Strava(storage, self.config.strava_group)
         self.bot = telepot.Bot(self.config.bot_api_key)
+        self.leaderboard = LeaderBoard()
 
     def run_as_thread(self) -> None:
         if self.config.bot_is_disabled:
@@ -78,18 +81,18 @@ class Bot:
     @RateLimiter(max_calls=1, period=10)  # one command per 10 seconds
     def handle_rank(self, command: str) -> str:
         count = 50
-        board = []
+        athletes = []
+        d = datetime.now().strftime("%d-%m-%Y %H:%M")
         match command.split("@")[0]:  # in Telegram groups commands look like /rank_10@gutsul2014_bot
             case "/rank":
-                board = self.strava.get_leaderboard(prev_week=False, elements=count)
+                athletes = self.strava.get_athletes(prev_week=False, elements=count)
             case "/rank_10":
-                board = self.strava.get_leaderboard(prev_week=False, elements=10)
+                athletes = self.strava.get_athletes(prev_week=False, elements=10)
             case "/rank_previous":
-                board = self.strava.get_leaderboard(prev_week=True, elements=count)
+                athletes = self.strava.get_athletes(prev_week=True, elements=count)
+                d = datetime.today().strftime("%d-%m-%Y 23:59")
 
-        if not board:
-            board = ["тут поки ніхто не бігав"]
-
+        board = [f"Рейтинг станом на {d}"] + self.leaderboard.get_table(athletes)
         return "<pre>" + "\n".join(board) + "</pre>"
 
     def handle_members(self):

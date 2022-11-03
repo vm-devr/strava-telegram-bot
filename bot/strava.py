@@ -2,13 +2,12 @@ import json
 from typing import List
 
 import requests
-from leaderboard import LeaderBoard
 from logger import log
 from member_list import Member, MemberList
 from storage import Storage
 
 
-class Strava(LeaderBoard):
+class Strava:
     session = requests.Session()
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0"
 
@@ -16,7 +15,7 @@ class Strava(LeaderBoard):
         self.storage = storage
         self.group = group
 
-    def get_leaderboard(self, prev_week, elements):
+    def get_athletes(self, prev_week, elements):
         log.debug("Reading latest leaderboard")
 
         def provide_name(ath):
@@ -28,9 +27,9 @@ class Strava(LeaderBoard):
         members = self.storage.get_members()
         raw_board = self._get_leaderboard(self.group, prev_week)
         filtered_board = list(filter(lambda ath: ath["id"] in members, raw_board))
-        board = list(map(provide_name, filtered_board[:elements]))
+        athletes = list(map(provide_name, filtered_board[:elements]))
 
-        return self.get_table(board)
+        return athletes
 
     def get_name(self, id_: int) -> str:
         return self.storage.get_name(id_)

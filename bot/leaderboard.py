@@ -1,12 +1,12 @@
 class LeaderBoard(object):
-    def get_table(self, data, dist_num=3):
-        for rank, ath in enumerate(data, start=1):
+    def get_table(self, athletes, dist_num=3):
+        for rank, ath in enumerate(athletes, start=1):
             ath["rank"] = rank
-        self._stringify_field(data, "rank", 2, True)
-        self._stringify_field(data, "name", 21 - dist_num, True)
-        self._stringify_field(data, "distance", dist_num, False)
+        self._stringify_field(athletes, "rank", 2, True)
+        self._stringify_field(athletes, "name", 21 - dist_num, True)
+        self._stringify_field(athletes, "distance", dist_num, False)
 
-        return list(map(lambda ath: ath["rank"] + " " + ath["name"] + " " + ath["distance"] + "km", data))
+        return list(map(lambda ath: ath["rank"] + " " + ath["name"] + " " + ath["distance"] + "km", athletes))
 
     @staticmethod
     def _stringify_field(data, field, max_symb, left):
