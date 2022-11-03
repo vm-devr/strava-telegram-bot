@@ -4,6 +4,7 @@ from datetime import datetime
 
 import telepot
 import telepot.loop
+from date import last_sunday
 from envclasses import envclass
 from leaderboard import LeaderBoard
 from logger import log
@@ -82,7 +83,8 @@ class Bot:
     def handle_rank(self, command: str) -> str:
         count = 50
         athletes = []
-        d = datetime.now().strftime("%d-%m-%Y %H:%M")
+        now = datetime.now()
+        d = now.strftime("%d-%m-%Y %H:%M")
         match command.split("@")[0]:  # in Telegram groups commands look like /rank_10@gutsul2014_bot
             case "/rank":
                 athletes = self.strava.get_athletes(prev_week=False, elements=count)
@@ -90,7 +92,7 @@ class Bot:
                 athletes = self.strava.get_athletes(prev_week=False, elements=10)
             case "/rank_previous":
                 athletes = self.strava.get_athletes(prev_week=True, elements=count)
-                d = datetime.today().strftime("%d-%m-%Y 23:59")
+                d = last_sunday(now).strftime("%d-%m-%Y 23:59")
 
         board = [f"Рейтинг станом на {d}"] + self.leaderboard.get_table(athletes)
         return "<pre>" + "\n".join(board) + "</pre>"
