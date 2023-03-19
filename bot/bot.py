@@ -104,5 +104,8 @@ class Bot:
         return (
             "Для появи вас в рейтингу, необхідно виконати дії:\n1. Подати заявку на вступ в "
             f'<a href="https://www.strava.com/clubs/{self.config.strava_group}">Strava клуб</a>.\n'
-            f"2. Написати в Telegram @{self.config.bot_admin}. Адмін заапрувить заявку та налаштує бота."
+            '2. Знайти посилання на <a href="https://support.strava.com/hc/en-us/articles/'
+            '4418607378189-How-to-Get-and-Share-Links-From-Strava">ваш Strava профіль</a>.\n'
+            f"3. Скинути це посилання в Telegram @{self.config.bot_admin}.\n"
+            "Адмін заапрувить заявку та налаштує бота."
         )
